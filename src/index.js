@@ -9,6 +9,7 @@ class Consola extends React.Component {
     super(props);
     this.state = {date: new Date(),
       name:User1.name,
+      fase:"inicio",
     };
     this.accion1 = this.accion1.bind(this);
   }
@@ -26,10 +27,14 @@ class Consola extends React.Component {
 
   accion1(dato) {
     if(dato == 'retirar'){
-      window.alert('desea retirar');
+      this.setState({
+        fase: 'retirar'
+      });
     }
     else if(dato == 'ingresar'){
-      window.alert('desea ingresar');
+      this.setState({
+        fase: 'ingresar'
+      });
     }
   }
 
@@ -41,9 +46,12 @@ class Consola extends React.Component {
 
   render() {
     const Name = <Welcome name={this.state.name} />;
+    const Inicio = "inicio";
     return (
     <div>
       <center>
+      {this.state.fase == "inicio" &&
+      <div>
       {Name}
       <h1>Bienvenido a banca johan!</h1>
       <h2>La hora es {this.state.date.toLocaleTimeString()}.</h2>
@@ -62,6 +70,14 @@ class Consola extends React.Component {
           </td>
         </tr>
       </table>
+      </div>
+      }
+      {this.state.fase == "retirar" &&
+        <p>retiralo papi</p>
+      }
+      {this.state.fase == "ingresar" &&
+        <p>ingresalo papi</p>
+      }
       </center>
     </div>
   );  
