@@ -10,14 +10,18 @@ class Consola extends React.Component {
     this.state = {date: new Date(),
       name:User1.name,
       ahorros:User1.Ahorro,
+      valor:"",
       fase:"inicio",
+      fasePrev:"",
     };
     this.accion1 = this.accion1.bind(this);
     this.retiro = this.retiro.bind(this);
     this.inicio = this.inicio.bind(this);
     this.consultar = this.consultar.bind(this);
-    //this.vespec = this.vespec.bind(this);
+    this.valorEsp = this.valorEsp.bind(this);
     this.ingreso = this.ingreso.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -40,6 +44,15 @@ class Consola extends React.Component {
   consultar(){
     this.setState({
       fase: 'consulta'
+    });
+  }
+
+  valorEsp(){
+    this.setState({
+      fasePrev: this.state.fase
+    });
+    this.setState({
+      fase: 'valorEsp'
     });
   }
 
@@ -67,7 +80,7 @@ class Consola extends React.Component {
     }
     else{
       this.setState({
-        fase: 'noMoney'
+        fase: 'fracaso'
       });
     }
   }
@@ -85,6 +98,49 @@ class Consola extends React.Component {
     this.setState({
       date: new Date()
     });
+  }
+
+  handleChange(event) {
+    this.setState({
+      valor: event.target.value
+    });
+  }
+
+  handleSubmit(event) {
+    let dato = parseInt(this.state.valor, 10);
+    if(this.state.fasePrev === 'retirar'){
+      if(this.state.valor <= this.state.ahorros){
+        this.setState({
+          ahorros: this.state.ahorros - dato
+        });
+        this.setState({
+          valor: ""
+        });
+        this.setState({
+          fase: 'exito'
+        });
+      }
+      else{
+        this.setState({
+          fase: 'fracaso'
+        });
+        this.setState({
+          valor: ""
+        });
+      }
+    }
+    else if(this.state.fasePrev === 'ingresar'){
+      this.setState({
+        ahorros: this.state.ahorros + dato
+      });
+      this.setState({
+        valor: ""
+      });
+      this.setState({
+        fase: 'exito'
+      });
+    }
+    event.preventDefault();
   }
 
   render() {
@@ -177,7 +233,7 @@ class Consola extends React.Component {
         </tr>
         <tr>
           <td>
-          <button class="btn btn-success btn-ancho" onClick={this.inicio.bind(this, "retiro")}>
+          <button class="btn btn-success btn-ancho" onClick={this.valorEsp.bind(this)}>
           Valor especifico
           </button>
           </td>
@@ -233,7 +289,7 @@ class Consola extends React.Component {
         </tr>
         <tr>
           <td>
-          <button class="btn btn-success btn-ancho" onClick={this.inicio.bind(this, "ingreso")}>
+          <button class="btn btn-success btn-ancho" onClick={this.valorEsp.bind(this)}>
           Valor especifico
           </button>
           </td>
@@ -258,6 +314,31 @@ class Consola extends React.Component {
         </button>
       </div>
     }
+
+{this.state.fase === "fracaso" &&
+      <div class="caja">
+        <p>La transaccion fue un fracaso, no dispones de suficiente dinero para realizar un retiro de ese estilo</p>
+        <p>Tu saldo actual es:</p>
+        <h1>{this.state.ahorros}</h1>
+        <br></br>
+        <button class="btn btn-primary btn-ancho" onClick={this.inicio.bind(this)}>
+          Volver al inicio
+        </button>
+      </div>
+    }
+
+{this.state.fase === "valorEsp" &&
+      <div class="caja">
+        <form onSubmit={this.handleSubmit}>
+        <label>
+          Ingresa el valor especifico para la transaccion:&nbsp;
+          <input type="number" value={this.state.valor} onChange={this.handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+      </div>
+    }
+
       </center>
     </div>
   );  
