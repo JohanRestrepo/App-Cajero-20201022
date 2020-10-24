@@ -345,8 +345,6 @@ class Consola extends React.Component {
   }
 }
 
-
-
 const User1 = {
   name: 'Alveiro',
   lastName: 're Alveiro',
