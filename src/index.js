@@ -9,9 +9,15 @@ class Consola extends React.Component {
     super(props);
     this.state = {date: new Date(),
       name:User1.name,
+      ahorros:User1.Ahorro,
       fase:"inicio",
     };
     this.accion1 = this.accion1.bind(this);
+    this.retiro = this.retiro.bind(this);
+    this.inicio = this.inicio.bind(this);
+    this.consultar = this.consultar.bind(this);
+    //this.vespec = this.vespec.bind(this);
+    this.ingreso = this.ingreso.bind(this);
   }
 
   componentDidMount() {
@@ -25,17 +31,54 @@ class Consola extends React.Component {
     clearInterval(this.timerID);
   }
 
+  inicio(){
+    this.setState({
+      fase: 'inicio'
+    });
+  }
+
+  consultar(){
+    this.setState({
+      fase: 'consulta'
+    });
+  }
+
   accion1(dato) {
-    if(dato == 'retirar'){
+    if(dato === 'retirar'){
       this.setState({
         fase: 'retirar'
       });
     }
-    else if(dato == 'ingresar'){
+    else if(dato === 'ingresar'){
       this.setState({
         fase: 'ingresar'
       });
     }
+  }
+
+  retiro(retiro) {
+    if(retiro <= this.state.ahorros){
+      this.setState({
+        ahorros: this.state.ahorros - retiro
+      });
+      this.setState({
+        fase: 'exito'
+      });
+    }
+    else{
+      this.setState({
+        fase: 'noMoney'
+      });
+    }
+  }
+
+  ingreso(adicion) {
+      this.setState({
+        ahorros: this.state.ahorros + adicion
+      });
+      this.setState({
+        fase: 'exito'
+      });
   }
 
   tick() {
@@ -46,12 +89,11 @@ class Consola extends React.Component {
 
   render() {
     const Name = <Welcome name={this.state.name} />;
-    const Inicio = "inicio";
     return (
-    <div>
+    <div class="container">
       <center>
-      {this.state.fase == "inicio" &&
-      <div>
+      {this.state.fase === "inicio" &&
+      <div class="caja">
       {Name}
       <h1>Bienvenido a banca johan!</h1>
       <h2>La hora es {this.state.date.toLocaleTimeString()}.</h2>
@@ -70,14 +112,152 @@ class Consola extends React.Component {
           </td>
         </tr>
       </table>
+      <table>
+        <tr>
+          <td>
+          <button class="btn btn-primary" onClick={this.consultar.bind(this)}>
+          Consultar saldo
+          </button>
+          </td>
+        </tr>
+      </table>
       </div>
       }
-      {this.state.fase == "retirar" &&
-        <p>retiralo papi</p>
+
+      {this.state.fase === "consulta" &&
+      <div class="caja">
+        <p>Tu saldo actual es:</p>
+        <h1>{this.state.ahorros}</h1>
+        <br></br>
+        <button class="btn btn-success btn-ancho" onClick={this.inicio.bind(this)}>
+          volver al menu principal
+        </button>
+      </div>
       }
-      {this.state.fase == "ingresar" &&
-        <p>ingresalo papi</p>
+
+      {this.state.fase === "retirar" &&
+      <div class="caja">
+      <p>Escoge un valor especifico para retirar</p>
+      <table>
+        <tr>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.retiro.bind(this, 50)}>
+          50
+          </button>
+          </td>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.retiro.bind(this, 100)}>
+          100
+          </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.retiro.bind(this, 200)}>
+          200
+          </button>
+          </td>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.retiro.bind(this, 300)}>
+          300
+          </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.retiro.bind(this, 400)}>
+          400
+          </button>
+          </td>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.retiro.bind(this, 500)}>
+          500
+          </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.inicio.bind(this, "retiro")}>
+          Valor especifico
+          </button>
+          </td>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.inicio.bind(this)}>
+          Cancelar transacción
+          </button>
+          </td>
+        </tr>
+      </table>
+      </div>
       }
+
+      {this.state.fase === "ingresar" &&
+        <div class="caja">
+      <p>Escoge un valor especifico para ingresar</p>
+      <table>
+        <tr>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.ingreso.bind(this, 50)}>
+          50
+          </button>
+          </td>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.ingreso.bind(this, 100)}>
+          100
+          </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.ingreso.bind(this, 200)}>
+          200
+          </button>
+          </td>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.ingreso.bind(this, 300)}>
+          300
+          </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.ingreso.bind(this, 400)}>
+          400
+          </button>
+          </td>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.ingreso.bind(this, 500)}>
+          500
+          </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.inicio.bind(this, "ingreso")}>
+          Valor especifico
+          </button>
+          </td>
+          <td>
+          <button class="btn btn-success btn-ancho" onClick={this.inicio.bind(this)}>
+          Cancelar transacción
+          </button>
+          </td>
+        </tr>
+      </table>
+      </div>
+      }
+
+    {this.state.fase === "exito" &&
+      <div class="caja">
+        <p>La transaccion fue un exito, gracias por escogernos</p>
+        <p>Tu saldo final es:</p>
+        <h1>{this.state.ahorros}</h1>
+        <br></br>
+        <button class="btn btn-primary btn-ancho" onClick={this.inicio.bind(this)}>
+          Volver al inicio
+        </button>
+      </div>
+    }
       </center>
     </div>
   );  

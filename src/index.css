@@ -11,3 +11,29 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.btn-ancho {
+  width: 150px;
+  height: 70px;
+}
+
+.caja { 
+  padding-top: 20px;
+  padding-bottom: 20px;
+  width: 700px;
+  background:#FFFFFF;
+  border-radius: 35px 0px 35px 0px;
+  -moz-border-radius: 35px 0px 35px 0px;
+  -webkit-border-radius: 35px 0px 35px 0px;
+  border: 0px solid #000066;
+  opacity: 0.8;
+  -moz-opacity: 0.8;
+  filter: alpha(opacity=80);
+  -khtml-opacity: 0.8;
+  }
+
+  .container{
+    background-image: url(./Imagenes/birds.jpg);
+    height: 700px;
+    width: 800px;
+  }
