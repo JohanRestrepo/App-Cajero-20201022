@@ -182,7 +182,7 @@ class Consola extends React.Component {
           </button>
           </td>
           <td>
-          <button class="btn btn-success btn-ancho" onClick={this.inicio.bind(this)}>
+          <button class="btn btn-danger btn-ancho" onClick={this.inicio.bind(this)}>
           Cancelar transacción
           </button>
           </td>
@@ -238,7 +238,7 @@ class Consola extends React.Component {
           </button>
           </td>
           <td>
-          <button class="btn btn-success btn-ancho" onClick={this.inicio.bind(this)}>
+          <button class="btn btn-danger btn-ancho" onClick={this.inicio.bind(this)}>
           Cancelar transacción
           </button>
           </td>
