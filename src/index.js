@@ -255,54 +255,41 @@ class ContruirOpt extends React.Component {
   }
 
   render() {
-  const opts1 = [50, 100];
-  const opts2 = [200, 300];
-  const opts3 = [400, 500];
+  const opts1 = [50, 200, 400];
+  const opts2 = [100, 300, 500];
   const listItems1 = opts1.map((opt) =>
-    <td>
-        <button class="btn btn-success btn-ancho" onClick={this.handleChange.bind(this, opt)}>
+        <div>
+        <button class="btn btn-success btn-ancho separate" onClick={this.handleChange.bind(this, opt)} >
         {opt}
         </button>
-    </td>
+        </div>
   );
   const listItems2 = opts2.map((opt) =>
-    <td>
-        <button class="btn btn-success btn-ancho" onClick={this.handleChange.bind(this, opt)}>
+       <div>
+        <button class="btn btn-success btn-ancho separate" onClick={this.handleChange.bind(this, opt)} >
         {opt}
         </button>
-    </td>
-  );
-  const listItems3 = opts3.map((opt) =>
-    <td>
-        <button class="btn btn-success btn-ancho" onClick={this.handleChange.bind(this, opt)}>
-        {opt}
-        </button>
-    </td>
+        </div>
   );
   return (
-    <table>
-      <tr>
+    <div >
+          <table  cellpadding="10%">
+          <tr>
+          <td class="separate">
           {listItems1}
-      </tr>
-      <tr>
-          {listItems2}
-      </tr>
-      <tr>
-          {listItems3}
-      </tr>
-      <tr>
-          <td>
           <button class="btn btn-success btn-ancho" onClick={this.handleChange3.bind(this)}>
           Valor especifico
           </button>
           </td>
-          <td>
+          <td class="separate">
+          {listItems2}
           <button class="btn btn-danger btn-ancho" onClick={this.handleChange2.bind(this, "inicio")}>
           Cancelar transacción
           </button>
           </td>
-        </tr>
-    </table>
+          </tr>
+          </table>
+    </div>
     );
   }
 }
