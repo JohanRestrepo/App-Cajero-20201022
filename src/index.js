@@ -275,13 +275,13 @@ class ContruirOpt extends React.Component {
     <div >
           <table  cellpadding="10%">
           <tr>
-          <td class="separate">
+          <td>
           {listItems1}
           <button class="btn btn-success btn-ancho" onClick={this.handleChange3.bind(this)}>
           Valor especifico
           </button>
           </td>
-          <td class="separate">
+          <td>
           {listItems2}
           <button class="btn btn-danger btn-ancho" onClick={this.handleChange2.bind(this, "inicio")}>
           Cancelar transacción
