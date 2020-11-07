@@ -1,354 +1,373 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import './css/bootstrap.css';
+import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import "./css/bootstrap.css";
 
-class Consola extends React.Component {
+const Consola = () => {
+  const [date, setDate] = useState(new Date());
+  const [name, setName] = useState(User1.name);
+  const [ahorros, setAhorros] = useState(User1.Ahorro);
+  const [timerID, setTimerID] = useState(User1.Ahorro);
+  const [valor, setValor] = useState("");
+  const [fase, setFase] = useState("inicio");
+  const [fasePrev, setFasePrev] = useState("");
 
-  constructor(props) {
-    super(props);
-    this.state = {date: new Date(),
-      name:User1.name,
-      ahorros:User1.Ahorro,
-      valor:"",
-      fase:"inicio",
-      fasePrev:"",
-    };
-    this.accion1 = this.accion1.bind(this);
-    this.retiro = this.retiro.bind(this);
-    this.inicio = this.inicio.bind(this);
-    this.consultar = this.consultar.bind(this);
-    this.valorEsp = this.valorEsp.bind(this);
-    this.ingreso = this.ingreso.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+  useEffect(() => {
+    setTimerID(setInterval(() => tick(), 1000));
+  }, []);
+
+  useEffect(() => {
+    setTimerID(setInterval(() => tick(), 1000));
+    return componentWillUnmount;
+  }, []);
+
+  const componentWillUnmount  = () => {
+    clearInterval(timerID);
   }
 
-  componentDidMount() {
-    this.timerID = setInterval(
-      () => this.tick(),
-      1000
-    );
+  const inicio = () => {
+    setFase("inicio");
   }
 
-  componentWillUnmount() {
-    clearInterval(this.timerID);
+  const consultar = () => {
+    setFase("consulta");
   }
 
-  inicio(){
-    this.setState({
-      fase: 'inicio'
-    });
+  const valorEsp = () => {
+    setFasePrev(fase);
+    setFase("valorEsp");
   }
 
-  consultar(){
-    this.setState({
-      fase: 'consulta'
-    });
-  }
-
-  valorEsp(){
-    this.setState({
-      fasePrev: this.state.fase
-    });
-    this.setState({
-      fase: 'valorEsp'
-    });
-  }
-
-  accion1(dato) {
-    if(dato === 'retirar'){
-      this.setState({
-        fase: 'retirar'
-      });
-    }
-    else if(dato === 'ingresar'){
-      this.setState({
-        fase: 'ingresar'
-      });
+  const accion1 = (dato) => {
+    switch (dato) {
+      case "retirar":
+        setFase("retirar");
+        break;
+      case "ingresar":
+        setFase("ingresar");
+        break;
+      default:
+        break;
     }
   }
 
-  retiro(retiro) {
-    if(retiro <= this.state.ahorros){
-      this.setState({
-        ahorros: this.state.ahorros - retiro
-      });
-      this.setState({
-        fase: 'exito'
-      });
-    }
-    else{
-      this.setState({
-        fase: 'fracaso'
-      });
+  const retiro = (retiroValor) => {
+    if (retiroValor <= ahorros) {
+      setAhorros(ahorros - retiroValor);
+      setFase("exito");
+    } else {
+      setFase("fracaso");
     }
   }
 
-  ingreso(adicion) {
-      this.setState({
-        ahorros: this.state.ahorros + adicion
-      });
-      this.setState({
-        fase: 'exito'
-      });
+  const ingreso = (adicion) => {
+    setAhorros(ahorros + adicion);
+    setFase("exito");
   }
 
-  tick() {
-    this.setState({
-      date: new Date()
-    });
+  const tick = () => {
+    setDate(new Date());
   }
 
-  handleChange(event) {
-    this.setState({
-      valor: event.target.value
-    });
+  const handleChange = ({target : { value }}) => {
+    setValor(value);
   }
 
-  handleSubmit(event) {
-    let dato = parseInt(this.state.valor, 10);
-    if(this.state.fasePrev === 'retirar'){
-      if(this.state.valor <= this.state.ahorros){
-        this.setState({
-          ahorros: this.state.ahorros - dato
-        });
-        this.setState({
-          valor: ""
-        });
-        this.setState({
-          fase: 'exito'
-        });
+  const handleSubmit = (event) => {
+    let dato = parseInt(valor, 10);
+    if (fasePrev === "retirar") {
+      if (valor <= ahorros) {
+        setAhorros(ahorros - dato);
+        setValor("");
+        setFase("exito");
+      } else {
+        setFase("fracaso");
+        setValor("");
       }
-      else{
-        this.setState({
-          fase: 'fracaso'
-        });
-        this.setState({
-          valor: ""
-        });
-      }
-    }
-    else if(this.state.fasePrev === 'ingresar'){
-      this.setState({
-        ahorros: this.state.ahorros + dato
-      });
-      this.setState({
-        valor: ""
-      });
-      this.setState({
-        fase: 'exito'
-      });
+    } else if (fasePrev === "ingresar") {
+      setAhorros(ahorros + dato);
+      setValor("");
+      setFase("exito");
     }
     event.preventDefault();
   }
 
-  render() {
-    const Name = <Welcome name={this.state.name} />;
+    const Name = <Welcome name={name} />;
     return (
-    <div class="container">
-      <center>
-      {this.state.fase === "inicio" &&
-      <div class="caja">
-      {Name}
-      <h1>Bienvenido a banca johan!</h1>
-      <h2>La hora es {this.state.date.toLocaleTimeString()}.</h2>
-      <p>¿En que podemos ayudarte el día de hoy?</p>
-      <table>
-        <tr>
-          <td>
-          <button class="btn btn-primary" onClick={this.accion1.bind(this, 'retirar')}>
-          Retirar dinero
-          </button>
-          </td>
-          <td>
-          <button class="btn btn-primary" onClick={this.accion1.bind(this, 'ingresar')}>
-          Ingresar dinero
-          </button>
-          </td>
-        </tr>
-      </table>
-      <table>
-        <tr>
-          <td>
-          <button class="btn btn-primary" onClick={this.consultar.bind(this)}>
-          Consultar saldo
-          </button>
-          </td>
-        </tr>
-      </table>
-      </div>
-      }
+      <div class="container">
+        <center>
+          {fase === "inicio" && (
+            <div class="caja">
+              {Name}
+              <h1>Bienvenido a banca johan!</h1>
+              <h2>La hora es {date.toLocaleTimeString()}.</h2>
+              <p>¿En que podemos ayudarte el día de hoy?</p>
+              <table>
+                <tr>
+                  <td>
+                    <button
+                      class="btn btn-primary"
+                      onClick={accion1("retirar")}
+                    >
+                      Retirar dinero
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-primary"
+                      onClick={accion1("ingresar")}
+                    >
+                      Ingresar dinero
+                    </button>
+                  </td>
+                </tr>
+              </table>
+              <table>
+                <tr>
+                  <td>
+                    <button
+                      class="btn btn-primary"
+                      onClick={consultar}
+                    >
+                      Consultar saldo
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          )}
 
-      {this.state.fase === "consulta" &&
-      <div class="caja">
-        <p>Tu saldo actual es:</p>
-        <h1>{this.state.ahorros}</h1>
-        <br></br>
-        <button class="btn btn-success btn-ancho" onClick={this.inicio.bind(this)}>
-          volver al menu principal
-        </button>
-      </div>
-      }
+          {fase === "consulta" && (
+            <div class="caja">
+              <p>Tu saldo actual es:</p>
+              <h1>{ahorros}</h1>
+              <br></br>
+              <button
+                class="btn btn-success btn-ancho"
+                onClick={inicio}
+              >
+                volver al menu principal
+              </button>
+            </div>
+          )}
 
-      {this.state.fase === "retirar" &&
-      <div class="caja">
-      <p>Escoge un valor especifico para retirar</p>
-      <table>
-        <tr>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.retiro.bind(this, 50)}>
-          50
-          </button>
-          </td>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.retiro.bind(this, 100)}>
-          100
-          </button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.retiro.bind(this, 200)}>
-          200
-          </button>
-          </td>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.retiro.bind(this, 300)}>
-          300
-          </button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.retiro.bind(this, 400)}>
-          400
-          </button>
-          </td>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.retiro.bind(this, 500)}>
-          500
-          </button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.valorEsp.bind(this)}>
-          Valor especifico
-          </button>
-          </td>
-          <td>
-          <button class="btn btn-danger btn-ancho" onClick={this.inicio.bind(this)}>
-          Cancelar transacción
-          </button>
-          </td>
-        </tr>
-      </table>
-      </div>
-      }
+          {fase === "retirar" && (
+            <div class="caja">
+              <p>Escoge un valor especifico para retirar</p>
+              <table>
+                <tr>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={retiro(50)}
+                    >
+                      50
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={retiro(100)}
+                    >
+                      100
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={retiro(200)}
+                    >
+                      200
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={retiro(300)}
+                    >
+                      300
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={retiro(400)}
+                    >
+                      400
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={retiro(500)}
+                    >
+                      500
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={valorEsp}
+                    >
+                      Valor especifico
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-danger btn-ancho"
+                      onClick={inicio}
+                    >
+                      Cancelar transacción
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          )}
 
-      {this.state.fase === "ingresar" &&
-        <div class="caja">
-      <p>Escoge un valor especifico para ingresar</p>
-      <table>
-        <tr>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.ingreso.bind(this, 50)}>
-          50
-          </button>
-          </td>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.ingreso.bind(this, 100)}>
-          100
-          </button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.ingreso.bind(this, 200)}>
-          200
-          </button>
-          </td>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.ingreso.bind(this, 300)}>
-          300
-          </button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.ingreso.bind(this, 400)}>
-          400
-          </button>
-          </td>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.ingreso.bind(this, 500)}>
-          500
-          </button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-          <button class="btn btn-success btn-ancho" onClick={this.valorEsp.bind(this)}>
-          Valor especifico
-          </button>
-          </td>
-          <td>
-          <button class="btn btn-danger btn-ancho" onClick={this.inicio.bind(this)}>
-          Cancelar transacción
-          </button>
-          </td>
-        </tr>
-      </table>
-      </div>
-      }
+          {fase === "ingresar" && (
+            <div class="caja">
+              <p>Escoge un valor especifico para ingresar</p>
+              <table>
+                <tr>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={ingreso(50)}
+                    >
+                      50
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={ingreso(100)}
+                    >
+                      100
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={ingreso(200)}
+                    >
+                      200
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={ingreso(300)}
+                    >
+                      300
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={ingreso(400)}
+                    >
+                      400
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={ingreso(500)}
+                    >
+                      500
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <button
+                      class="btn btn-success btn-ancho"
+                      onClick={valorEsp}
+                    >
+                      Valor especifico
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-danger btn-ancho"
+                      onClick={inicio}
+                    >
+                      Cancelar transacción
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          )}
 
-    {this.state.fase === "exito" &&
-      <div class="caja">
-        <p>La transaccion fue un exito, gracias por escogernos</p>
-        <p>Tu saldo final es:</p>
-        <h1>{this.state.ahorros}</h1>
-        <br></br>
-        <button class="btn btn-primary btn-ancho" onClick={this.inicio.bind(this)}>
-          Volver al inicio
-        </button>
-      </div>
-    }
+          {fase === "exito" && (
+            <div class="caja">
+              <p>La transaccion fue un exito, gracias por escogernos</p>
+              <p>Tu saldo final es:</p>
+              <h1>{ahorros}</h1>
+              <br></br>
+              <button
+                class="btn btn-primary btn-ancho"
+                onClick={inicio}
+              >
+                Volver al inicio
+              </button>
+            </div>
+          )}
 
-{this.state.fase === "fracaso" &&
-      <div class="caja">
-        <p>La transaccion fue un fracaso, no dispones de suficiente dinero para realizar un retiro de ese estilo</p>
-        <p>Tu saldo actual es:</p>
-        <h1>{this.state.ahorros}</h1>
-        <br></br>
-        <button class="btn btn-primary btn-ancho" onClick={this.inicio.bind(this)}>
-          Volver al inicio
-        </button>
-      </div>
-    }
+          {fase === "fracaso" && (
+            <div class="caja">
+              <p>
+                La transaccion fue un fracaso, no dispones de suficiente dinero
+                para realizar un retiro de ese estilo
+              </p>
+              <p>Tu saldo actual es:</p>
+              <h1>{ahorros}</h1>
+              <br></br>
+              <button
+                class="btn btn-primary btn-ancho"
+                onClick={inicio}
+              >
+                Volver al inicio
+              </button>
+            </div>
+          )}
 
-{this.state.fase === "valorEsp" &&
-      <div class="caja">
-        <form onSubmit={this.handleSubmit}>
-        <label>
-          Ingresa el valor especifico para la transaccion:&nbsp;
-          <input type="number" value={this.state.valor} onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+          {fase === "valorEsp" && (
+            <div class="caja">
+              <form onSubmit={handleSubmit}>
+                <label>
+                  Ingresa el valor especifico para la transaccion:&nbsp;
+                  <input
+                    type="number"
+                    value={valor}
+                    onChange={handleChange}
+                  />
+                </label>
+                <input type="submit" value="Submit" />
+              </form>
+            </div>
+          )}
+        </center>
       </div>
-    }
-
-      </center>
-    </div>
-  );  
-  }
+    );
 }
 
 const User1 = {
-  name: 'Alveiro',
-  lastName: 're Alveiro',
-  password: 'kevin-gay',
+  name: "Alveiro",
+  lastName: "re Alveiro",
+  password: "kevin-gay",
   Ahorro: 10000,
 };
 
@@ -356,6 +375,4 @@ function Welcome(props) {
   return <h1>Hello, {props.name}</h1>;
 }
 
-ReactDOM.render(<Consola/>,
- document.getElementById('root')
- );
+ReactDOM.render(<Consola />, document.getElementById("root"));
