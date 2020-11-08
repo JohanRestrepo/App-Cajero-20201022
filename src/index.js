@@ -119,17 +119,10 @@ class Consola extends React.Component {
       </div>
       }
 
-      {this.state.fase === "retirar" &&
+      {(this.state.fase === "retirar" || this.state.fase === "ingresar") &&
       <div class="caja">
-      <p>Escoge un valor especifico para retirar</p>
+      <p>Escoge un valor especifico para transaccion</p>
       {panelRetiro}
-      </div>
-      }
-
-      {this.state.fase === "ingresar" &&
-        <div class="caja">
-      <p>Escoge un valor especifico para ingresar</p>
-      {panelIngreso}
       </div>
       }
 
