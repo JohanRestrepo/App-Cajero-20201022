@@ -14,10 +14,8 @@ class Consola extends React.Component {
       fase:"inicio",
       fasePrev:"",
     };
-    this.accion1 = this.accion1.bind(this);
-    this.retiro = this.retiro.bind(this);
+    this.retiroConsigna = this.retiroConsigna.bind(this);
     this.valorEsp = this.valorEsp.bind(this);
-    this.ingreso = this.ingreso.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.cambiarFase = this.cambiarFase.bind(this);
@@ -30,42 +28,8 @@ class Consola extends React.Component {
     );
   }
 
-  cambiarFase(faseN){
-    this.setState({
-      fase: faseN
-    });
-  }
-
   componentWillUnmount() {
     clearInterval(this.timerID);
-  }
-
-  accion1(dato) {
-    if(dato === 'retirar'){
-      this.cambiarFase('retirar')
-    }
-    else if(dato === 'ingresar'){
-      this.cambiarFase('ingresar')
-    }
-  }
-
-  retiro(retiro) {
-    if(retiro <= this.state.ahorros){
-      this.setState({
-        ahorros: this.state.ahorros - retiro
-      });
-      this.cambiarFase('exito')
-    }
-    else{
-      this.cambiarFase('fracaso')
-    }
-  }
-
-  ingreso(adicion) {
-      this.setState({
-        ahorros: this.state.ahorros + adicion
-      });
-      this.cambiarFase('exito')
   }
 
   tick() {
@@ -74,57 +38,55 @@ class Consola extends React.Component {
     });
   }
 
+  cambiarFase(faseN){
+    this.setState({
+      fase: faseN
+    });
+  }
+  
+  handleSubmit(event) {
+    let dato = parseInt(this.state.valor, 10);
+    if(this.state.fasePrev === 'retirar'){
+        dato = 0 - dato
+    }
+    this.setState({ valor: ""});
+    this.retiroConsigna(dato)
+  }
+
+  retiroConsigna(Value) {
+    if(this.state.fase === "retirar"){
+      Value = 0 - Value
+    }
+    Value = this.state.ahorros + Value
+    if(Value >= 0){
+      this.setState({
+        ahorros: Value
+      });
+      this.cambiarFase('exito')
+    }
+    else{
+      this.cambiarFase('fracaso')
+    }
+  }
+
   handleChange(event) {
     this.setState({
       valor: event.target.value
     });
   }
 
-  handleSubmit(event) {
-    let dato = parseInt(this.state.valor, 10);
-    if(this.state.fasePrev === 'retirar'){
-      if(this.state.valor <= this.state.ahorros){
-        this.setState({
-          ahorros: this.state.ahorros - dato
-        });
-        this.setState({
-          valor: ""
-        });
-        this.cambiarFase('exito')
-      }
-      else{
-        this.cambiarFase('fracaso')
-        this.setState({
-          valor: ""
-        });
-      }
-    }
-    else if(this.state.fasePrev === 'ingresar'){
-      this.setState({
-        ahorros: this.state.ahorros + dato
-      });
-      this.setState({
-        valor: ""
-      });
-      this.cambiarFase('exito')
-    }
-    event.preventDefault();
-  }
-
   valorEsp(){
-    this.setState({
-      fasePrev: this.state.fase
-    });
+    this.setState({fasePrev: this.state.fase});
     this.cambiarFase('valorEsp')
   }
 
   render() {
     const Name = <Welcome name={this.state.name} />;
-    const panelRetiro= <ContruirOpt data={this.retiro} inicio={this.cambiarFase} ValEsp={this.valorEsp}/>;
-    const panelIngreso= <ContruirOpt data={this.ingreso} inicio={this.cambiarFase} ValEsp={this.valorEsp}/>;
+    const panelRetiro= <ContruirOpt data={this.retiroConsigna} inicio={this.cambiarFase} ValEsp={this.valorEsp}/>;
+    const panelIngreso= <ContruirOpt data={this.retiroConsigna} inicio={this.cambiarFase} ValEsp={this.valorEsp}/>;
     return (
     <div class="container">
-      <center>
+      <center>  
       {this.state.fase === "inicio" &&
       <div class="caja">
       {Name}
@@ -134,12 +96,12 @@ class Consola extends React.Component {
       <table>
         <tr>
           <td>
-          <button class="btn btn-primary" onClick={this.accion1.bind(this, 'retirar')}>
+          <button class="btn btn-primary" onClick={this.cambiarFase.bind(this, 'retirar')}>
           Retirar dinero
           </button>
           </td>
           <td>
-          <button class="btn btn-primary" onClick={this.accion1.bind(this, 'ingresar')}>
+          <button class="btn btn-primary" onClick={this.cambiarFase.bind(this, 'ingresar')}>
           Ingresar dinero
           </button>
           </td>
@@ -157,17 +119,6 @@ class Consola extends React.Component {
       </div>
       }
 
-      {this.state.fase === "consulta" &&
-      <div class="caja">
-        <p>Tu saldo actual es:</p>
-        <h1>{this.state.ahorros}</h1>
-        <br></br>
-        <button class="btn btn-success btn-ancho" onClick={this.cambiarFase.bind(this, "inicio")}>
-          volver al menu principal
-        </button>
-      </div>
-      }
-
       {this.state.fase === "retirar" &&
       <div class="caja">
       <p>Escoge un valor especifico para retirar</p>
@@ -182,29 +133,18 @@ class Consola extends React.Component {
       </div>
       }
 
-    {this.state.fase === "exito" &&
+      {(this.state.fase === "consulta" || this.state.fase === "exito" || this.state.fase === "fracaso") &&
       <div class="caja">
-        <p>La transaccion fue un exito, gracias por escogernos</p>
-        <p>Tu saldo final es:</p>
-        <h1>{this.state.ahorros}</h1>
-        <br></br>
-        <button class="btn btn-primary btn-ancho" onClick={this.cambiarFase.bind(this, "inicio")}>
-          Volver al inicio
-        </button>
-      </div>
-    }
-
-{this.state.fase === "fracaso" &&
-      <div class="caja">
-        <p>La transaccion fue un fracaso, no dispones de suficiente dinero para realizar un retiro de ese estilo</p>
+        {this.state.fase === "exito" && <p>La transaccion fue un exito, gracias por escogernos</p>}
+        {this.state.fase === "fracaso" && <p>La transaccion fue un fracaso, no dispones de suficiente dinero para realizar un retiro de ese estilo</p>}
         <p>Tu saldo actual es:</p>
         <h1>{this.state.ahorros}</h1>
         <br></br>
-        <button class="btn btn-primary btn-ancho" onClick={this.cambiarFase.bind(this, "inicio")}>
-          Volver al inicio
+        <button class="btn btn-success btn-ancho" onClick={this.cambiarFase.bind(this, "inicio")}>
+          volver al menu principal
         </button>
       </div>
-    }
+      }
 
 {this.state.fase === "valorEsp" &&
       <div class="caja">
