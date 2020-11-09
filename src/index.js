@@ -139,21 +139,21 @@ class Consola extends React.Component {
       </div>
       }
 
-{this.state.fase === "valorEsp" &&
-      <div class="caja">
-        <form onSubmit={this.handleSubmit}>
-        <label>
-          Ingresa el valor especifico para la transaccion:&nbsp;
-          <input type="number" value={this.state.valor} onChange={this.handleChange} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-      </div>
-    }
-      </center>
-    </div>
-  );  
-  }
+      {this.state.fase === "valorEsp" &&
+            <div class="caja">
+              <form onSubmit={this.handleSubmit}>
+              <label>
+                Ingresa el valor especifico para la transaccion:&nbsp;
+                <input type="number" value={this.state.valor} onChange={this.handleChange} />
+              </label>
+              <input type="submit" value="Submit" />
+            </form>
+            </div>
+          }
+            </center>
+          </div>
+        );  
+        }
 }
 
 const User1 = {
@@ -188,40 +188,22 @@ class ContruirOpt extends React.Component {
   }
 
   render() {
-  const opts1 = [50, 200, 400];
-  const opts2 = [100, 300, 500];
+  const opts1 = [500, 1000, 1500, 2000, 2500, 3000];
   const listItems1 = opts1.map((opt) =>
-        <div>
-        <button class="btn btn-success btn-ancho separate" onClick={this.handleChange.bind(this, opt)} >
+        <button class="btn btn-success btn-ancho" onClick={this.handleChange.bind(this, opt)} >
         {opt}
         </button>
-        </div>
-  );
-  const listItems2 = opts2.map((opt) =>
-       <div>
-        <button class="btn btn-success btn-ancho separate" onClick={this.handleChange.bind(this, opt)} >
-        {opt}
-        </button>
-        </div>
   );
   return (
-    <div >
-          <table  cellpadding="10%">
-          <tr>
-          <td>
+    <div class="grid grid-pad">
           {listItems1}
+          <br></br>
           <button class="btn btn-success btn-ancho" onClick={this.handleChange3.bind(this)}>
           Valor especifico
           </button>
-          </td>
-          <td>
-          {listItems2}
           <button class="btn btn-danger btn-ancho" onClick={this.handleChange2.bind(this, "inicio")}>
           Cancelar transacción
           </button>
-          </td>
-          </tr>
-          </table>
     </div>
     );
   }
