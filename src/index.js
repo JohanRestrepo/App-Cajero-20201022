@@ -89,39 +89,28 @@ class Consola extends React.Component {
       <center>  
       {this.state.fase === "inicio" &&
       <div class="caja">
+      <center>
       {Name}
       <h1>Bienvenido a banca johan!</h1>
       <h2>La hora es {this.state.date.toLocaleTimeString()}.</h2>
       <p>¿En que podemos ayudarte el día de hoy?</p>
-      <table>
-        <tr>
-          <td>
-          <button class="btn btn-primary" onClick={this.cambiarFase.bind(this, 'retirar')}>
+      <div class="grid grid-pad">
+          <button class="btn btn-primary btn-ancho" onClick={this.cambiarFase.bind(this, 'retirar')}>
           Retirar dinero
           </button>
-          </td>
-          <td>
-          <button class="btn btn-primary" onClick={this.cambiarFase.bind(this, 'ingresar')}>
+          <button class="btn btn-primary btn-ancho" onClick={this.cambiarFase.bind(this, 'ingresar')}>
           Ingresar dinero
           </button>
-          </td>
-        </tr>
-      </table>
-      <table>
-        <tr>
-          <td>
-          <button class="btn btn-primary" onClick={this.cambiarFase.bind(this, "consulta")}>
+          <button class="btn btn-primary btn-ancho" onClick={this.cambiarFase.bind(this, "consulta")}>
           Consultar saldo
           </button>
-          </td>
-        </tr>
-      </table>
+      </div>
+      </center>
       </div>
       }
 
       {(this.state.fase === "retirar" || this.state.fase === "ingresar") &&
       <div class="caja">
-      <p>Escoge un valor especifico para transaccion</p>
       {panelRetiro}
       </div>
       }
@@ -150,10 +139,11 @@ class Consola extends React.Component {
             </form>
             </div>
           }
-            </center>
-          </div>
-        );  
-        }
+    </center>
+  </div>
+  );  
+  }
+    
 }
 
 const User1 = {
@@ -196,8 +186,9 @@ class ContruirOpt extends React.Component {
   );
   return (
     <div class="grid grid-pad">
-          {listItems1}
+          <p>Escoge un valor especifico para transaccion</p>
           <br></br>
+          {listItems1}
           <button class="btn btn-success btn-ancho" onClick={this.handleChange3.bind(this)}>
           Valor especifico
           </button>

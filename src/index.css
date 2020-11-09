@@ -13,10 +13,11 @@ code {
 }
 
 .btn-ancho {
-  width: 50%;
+  width: 40%;
   height: 70px;
+  margin-top:10px;
+  margin-left: 5px;
 }
-
 
 .caja { 
   padding-top: 20px;
